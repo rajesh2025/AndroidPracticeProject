@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.android.practice.UI.ServiceBindingActivity">
+
+    <Button
+        android:id="@+id/btn_update_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update List"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_start_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Service"
+        app:layout_constraintTop_toBottomOf="@+id/btn_update_list"
+         />
+
+    <ListView
+        android:id="@+id/lv_word_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fastScrollEnabled="true"
+        app:layout_constraintTop_toBottomOf="@+id/btn_start_service" />
+</android.support.constraint.ConstraintLayout>
