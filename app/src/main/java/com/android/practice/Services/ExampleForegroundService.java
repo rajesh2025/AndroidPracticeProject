@@ -5,12 +5,15 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.WallpaperManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -38,6 +41,10 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -191,7 +198,6 @@ public class ExampleForegroundService extends Service {
 
         Notification notification = notificationBuilder(pendingIntent, prevPending, playPending, nextPending);
         startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
-
     }
 
 
@@ -218,11 +224,25 @@ public class ExampleForegroundService extends Service {
         }
 
         NotificationCompat.Builder oreoNotifBuilder = new NotificationCompat.Builder(this, channel_id);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.my_car);
+            BitmapDrawable bitmapDrawable = ((BitmapDrawable) drawable);
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream); //use the compression format of your need
+//            InputStream is = new ByteArrayInputStream(stream.toByteArray());
+//            try {
+//                WallpaperManager.getInstance(this).setStream(is, null, true, WallpaperManager.FLAG_LOCK);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         return oreoNotifBuilder.setContentTitle("Practice Music Player").
                 setTicker("Practice Music Player").
                 setContentText("My Song").
                 setSmallIcon(R.drawable.ic_stat_name).
+//                setLargeIcon(bitmap).
                 setContentIntent(contentIntent)
                 .setOngoing(true)
                 .addAction(android.R.drawable.ic_media_previous, "Previous", prevPending).
