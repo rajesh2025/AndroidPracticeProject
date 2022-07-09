@@ -4,13 +4,12 @@ package com.android.practice.UI;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +19,6 @@ import com.android.practice.Adapters.SongsDisplayAdapter;
 import com.android.practice.R;
 import com.android.practice.Services.ExampleForegroundService;
 import com.android.practice.Utilities.Constants;
-
-import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

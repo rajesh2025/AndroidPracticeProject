@@ -5,46 +5,32 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.WallpaperManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.android.practice.Models.DeviceSongs;
 import com.android.practice.R;
 import com.android.practice.UI.Mp3SongsActivity;
 import com.android.practice.Utilities.Constants;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -54,11 +40,12 @@ import java.util.ArrayList;
 public class ExampleForegroundService extends Service {
     private static final String LOG_TAG = "ForegroundService";
     public static boolean IS_SERVICE_RUNNING = false;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private boolean play_pause = false;
 
     private ServiceBinder binder = new ServiceBinder();
     private ArrayList<DeviceSongs> songs;
+
 
     public class ServiceBinder extends Binder {
 
@@ -77,9 +64,7 @@ public class ExampleForegroundService extends Service {
     public void onCreate() {
         super.onCreate();
         songs = new ArrayList<>();
-        player = ExoPlayerFactory.newSimpleInstance(
-                new DefaultRenderersFactory(this),
-                new DefaultTrackSelector(), new DefaultLoadControl());
+        player = new ExoPlayer.Builder(this).build();
 
     }
 
@@ -97,17 +82,9 @@ public class ExampleForegroundService extends Service {
     }
 
     private MediaSource buildMediaSource(Uri uri) {
-        // Measures bandwidth during playback. Can be null if not required.
-        DefaultBandwidthMeter defBandwidthMeter = new DefaultBandwidthMeter();
-        // Produces DataSource instances through which media data is loaded.
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, getString(R.string.app_name)), defBandwidthMeter);
-        // Produces Extractor instances for parsing the media data.
-        DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
+        return new ProgressiveMediaSource.Factory(new DefaultHttpDataSource.Factory())
+                .createMediaSource(MediaItem.fromUri(uri));
         // This is the MediaSource representing the media to be played.
-        return new ExtractorMediaSource(uri,
-                dataSourceFactory, extractorsFactory, null, null);
     }
 
 

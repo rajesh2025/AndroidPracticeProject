@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:exported="false">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -24,7 +24,7 @@
             <!-- </intent-filter> -->
         </activity>
         <!-- alarm activity -->
-        <activity android:name=".UI.AlarmActivity" />
+        <activity android:name=".UI.AlarmActivity"  android:exported="false"/>
 
         <receiver
             android:name=".Receivers.LocalNotificationReceiver"
@@ -35,7 +35,7 @@
             android:name=".Services.PracticeIntentService"
             android:exported="false" />
 
-        <activity android:name=".UI.IntentServiceActivity">
+        <activity android:name=".UI.IntentServiceActivity" android:exported="false">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -54,12 +54,13 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".UI.ServiceBindingActivity">
+        <activity android:name=".UI.ServiceBindingActivity" android:exported="false">
 
         </activity>
         <activity android:name=".UI.Mp3SongsActivity"
             android:launchMode="singleInstance"
-            android:taskAffinity="">
+            android:taskAffinity=""
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
