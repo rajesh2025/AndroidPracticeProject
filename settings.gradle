@@ -1,1 +1,4 @@
-include ':app', ':droidsecurityexcercise'
+//include ':app', ':droidsecurityexcercise'
+//include ':android_fundamentals'
+include ':aidlsample'
+include ':contentproviderkotlincompose'

@@ -1,0 +1,55 @@
+similar to the publish-subscribe design pattern
+
+Android apps can send or receive broadcast messages from the Android system and other Android apps
+
+Send Broadcast:
+----------------
+
+when the system boots up or the device starts charging.
+Apps can also send custom broadcasts, for example, to notify other apps of something that they might be interested in
+(for example, some new data has been downloaded).
+The system automatically sends broadcasts when various system events occur,
+System broadcasts are sent to all apps that are subscribed to receive the event.
+
+Keep the following changes in mind if your app targets Android 7.0 (API level 24) or higher, or if it's installed on devices
+running Android 7.0 or higher.
+
+Changes to system broadcasts
+1- The NETWORK_STATE_CHANGED_ACTION broadcast doesn't receive information about the user's location or personally identifiable data.
+2- If your app targets Android 8.0 or higher, you cannot use the manifest to declare a receiver for most implicit broadcasts (broadcasts
+ that don't target your app specifically). You can still use a context-registered receiver when the user is actively using your app.
+3-  apps targeting Android 7.0 and higher must register the CONNECTIVITY_ACTION broadcast using registerReceiver(BroadcastReceiver, IntentFilter).
+ Declaring a receiver in the manifest doesn't work.
+
+Receive a broadcast
+-------------
+Apps can register broadcast in two ways
+: through manifest-declared receivers and context-registered receivers.
+Note: If your app targets API level 26 or higher, you cannot use the manifest to declare a receiver for implicit broadcasts
+(broadcasts that do not target your app specifically), except for a few implicit broadcasts that are exempted from that restriction.
+
+1- [ACTION_LOCKED_BOOT_COMPLETED, ACTION_BOOT_COMPLETED]
+Exempted because these broadcasts are only sent only once, at first boot, and many apps need to receive this broadcast to schedule jobs, alarms, and so forth.
+2-[ACTION_USER_INITIALIZE, "android.intent.action.USER_ADDED", "android.intent.action.USER_REMOVED"]
+These broadcasts are protected by privileged permissions, so most normal apps cannot receive them anyway.
+3-["android.intent.action.TIME_SET", ACTION_TIMEZONE_CHANGED, ACTION_NEXT_ALARM_CLOCK_CHANGED]
+  Clock apps may need to receive these broadcasts to update alarms when the time, timezone, or alarms are changed.
+ 4- [ACTION_LOCALE_CHANGED]
+  Only sent when the locale changes, which is not often. Apps might need to update their data when the locale changes.
+  5-[ACTION_USB_ACCESSORY_ATTACHED, ACTION_USB_ACCESSORY_DETACHED, ACTION_USB_DEVICE_ATTACHED, ACTION_USB_DEVICE_DETACHED]
+  If an app needs to know about these USB-related events, there is not currently a good alternative to registering for the broadcast.
+6- [ACTION_CONNECTION_STATE_CHANGED, ACTION_CONNECTION_STATE_CHANGED, ACTION_ACL_CONNECTED, ACTION_ACL_DISCONNECTED
+   User experience is not likely to suffer if apps receive broadcasts for these Bluetooth events.
+  7-[ ACTION_CARRIER_CONFIG_CHANGED, TelephonyIntents.ACTION_*_SUBSCRIPTION_CHANGED, "TelephonyIntents.SECRET_CODE_ACTION",
+  ACTION_PHONE_STATE_CHANGED, ACTION_PHONE_ACCOUNT_REGISTERED, ACTION_PHONE_ACCOUNT_UNREGISTERED]
+   OEM telephony apps may need to receive these broadcasts.
+8- [LOGIN_ACCOUNTS_CHANGED_ACTION]
+  Some apps need to know about changes to login accounts so they can set up scheduled operations for the new and changed accounts.
+etc TL;DR;
+In most cases, Scheduled jobs can be used instead.
+example :
+<receiver android:name=".MyBroadcastReceiver"  android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+    </intent-filter>
+</receiver>
